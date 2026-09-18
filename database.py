@@ -56,10 +56,6 @@ def inicializar_db():
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (3,'activo','2026-11-09');
     """)
 
-    
-    
-
-
     conexion.commit()
     conexion.close()
 
