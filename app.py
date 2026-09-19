@@ -67,6 +67,30 @@ def eliminar_empleado(id):
     conexion.close()    
     return jsonify({"mensaje": "Empleado eliminado"})
 
+# INSERTAR EMPLEADO
+@app.route("/empleados", methods=["POST"])
+def crear_empleado():
+    datos = request.json
+
+    if not datos.get("nombre"):
+        return jsonify({"error": "nombre es obligatorio"}), 400
+    if not datos.get("cargo"):
+        return jsonify({"error": "cargo es obligatoria"}), 400
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        INSERT INTO empleados (nombre, cargo)
+        VALUES (?, ?)
+    """, (datos["nombre"], datos["cargo"]))
+
+    conexion.commit()
+    conexion.close()
+
+    return jsonify({"mensaje": "Empleado creado"}), 201
+
+
 # INSERTAR TURNO
 @app.route("/turnos", methods=["POST"])
 def crear_turno():
