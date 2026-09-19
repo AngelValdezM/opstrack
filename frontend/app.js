@@ -79,3 +79,65 @@ function prepararEdicion(id, nombre, cargo) {
 
 }
 
+async function cargarIncidencias() {
+    const respuesta = await fetch("http://127.0.0.1:5000/incidencias");
+    const incidencias = await respuesta.json();
+
+    const contenedor = document.getElementById("tabla-incidencias")
+    
+    incidencias.forEach(incidencia => {
+
+    const botonHtml = incidencia.estado === "cerrada" 
+        ? `<button class="btn btn-secondary btn-sm" disabled>Cerrada</button>`
+        : `<button class="btn btn-danger btn-sm" onclick="cerrarIncidencia(${incidencia.id})">Cerrar</button>`;
+
+    contenedor.innerHTML += 
+    `<tr>
+        <td>${incidencia.id}</td>
+        <td>${incidencia.descripcion}</td>
+        <td>${incidencia.severidad}</td>
+        <td>${incidencia.estado}</td>
+        <td>${botonHtml}</td>
+    </tr>`
+});
+}
+
+cargarIncidencias();
+
+document.getElementById("form-incidencia").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const turnoID = document.getElementById("input-turno-id").value;
+    const descripcion = document.getElementById("input-descripcion").value;
+    const severidad = document.getElementById("input-severidad").value;
+
+    
+    const respuesta = await fetch("http://127.0.0.1:5000/incidencias", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ turno_id: turnoID, descripcion: descripcion, severidad : severidad })
+    });
+
+    // limpiar formulario completo, incluyendo el modo
+    document.getElementById("input-turno-id").value = "";
+    document.getElementById("input-descripcion").value = "";
+    document.getElementById("input-severidad").value = "baja";
+    
+
+    const contenedor = document.getElementById("tabla-incidencias");
+    contenedor.innerHTML = "";
+    cargarIncidencias();
+
+});
+
+async function cerrarIncidencia(id) {
+
+    await fetch(`http://127.0.0.1:5000/incidencias/${id}/cerrar`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+    });
+    
+    const contenedor = document.getElementById("tabla-incidencias");
+    contenedor.innerHTML = "";
+    cargarIncidencias();
+}

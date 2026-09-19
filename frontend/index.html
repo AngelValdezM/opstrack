@@ -44,6 +44,41 @@
         </table>
     </div>
 
+    <div class="container mt-5">
+    <h2>Incidencias</h2>
+        <form id="form-incidencia" class="row g-2 mb-4">
+            <div class="col-auto">
+                <input type="number" id="input-turno-id" class="form-control" placeholder="ID de turno" required>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="input-descripcion" class="form-control" placeholder="Descripción" required>
+            </div>
+            <div class="col-auto">
+                <select id="input-severidad" class="form-select">
+                    <option value="baja">Baja</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Registrar incidencia</button>
+            </div>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Severidad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-incidencias"></tbody>
+        </table>
+    </div>
+
     <script src="app.js"></script>
     </body>
 </html>
