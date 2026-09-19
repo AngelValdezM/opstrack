@@ -56,6 +56,21 @@ def inicializar_db():
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (3,'activo','2026-11-09');
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS incidencias (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        turno_id INTEGER NOT NULL,
+        descripcion TEXT NOT NULL,
+        severidad TEXT NOT NULL,
+        estado TEXT NOT NULL DEFAULT 'abierta',
+        FOREIGN KEY (turno_id) REFERENCES turnos(id)
+        )
+    """)
+
+    cursor.execute(""" 
+            INSERT INTO incidencias (turno_id, descripcion, severidad, estado) VALUES ('1','Nombre mal hecho', 'Urgente', 'cerrada');
+        """)
+
     conexion.commit()
     conexion.close()
 

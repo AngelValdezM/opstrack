@@ -94,10 +94,7 @@ def crear_empleado():
 # INSERTAR TURNO
 @app.route("/turnos", methods=["POST"])
 def crear_turno():
-    # tu código aquí
-    # valida que empleado_id, estado y fecha vengan en el body
-    # si falta alguno, retorna un error 400 con jsonify({"error": "..."})
-    # si están completos, inserta el turno y retorna el turno creado
+
     datos = request.json
 
     if not datos.get("empleado_id"):
@@ -120,6 +117,70 @@ def crear_turno():
 
     return jsonify({"mensaje": "Turno creado"}), 201
 
+# INCIDENCIAS
+
+@app.route("/incidencias")
+def obtener_incidencias():
+    # tu código aquí, desde cero
+    # SELECT incidencias.id, incidencias.descripcion, incidencias.severidad, 
+    #        incidencias.estado, turnos.id as turno_id
+    # FROM incidencias JOIN turnos ON incidencias.turno_id = turnos.id
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+        
+    cursor.execute("""SELECT incidencias.id, incidencias.descripcion,   incidencias.severidad, incidencias.estado 
+    FROM incidencias
+    JOIN turnos ON incidencias.turno_id = turnos.id
+    """)
+        
+    filas = cursor.fetchall()
+    conexion.close()
+        
+    lista_convertida = [dict(fila) for fila in filas]
+    return jsonify(lista_convertida)
+
+# INSERTAR INCIDENCIAS
+@app.route("/incidencias", methods=["POST"])
+def crear_incidencia():
+
+    datos = request.json
+
+    if not datos.get("turno_id"):
+        return jsonify({"error": "turno_id es obligatorio"}), 400
+    if not datos.get("descripcion"):
+        return jsonify({"error": "descripcion es obligatorio"}), 400
+    if not datos.get("severidad"):
+        return jsonify({"error": "severidad es obligatoria"}), 400
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        INSERT INTO incidencias (turno_id, descripcion, severidad)
+        VALUES (?, ?, ?)
+    """, (datos["turno_id"], datos["descripcion"], datos["severidad"]))
+
+    conexion.commit()
+    conexion.close()
+
+    return jsonify({"mensaje": "Incidencia creada"}), 201
+
+# CERRAR INCIDENCIA 
+
+@app.route("/incidencias/<int:id>/cerrar", methods=["PUT"])
+def cerrar_incidencia(id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("""
+    UPDATE incidencias 
+    SET estado = 'cerrada' 
+    WHERE id = ?;
+    """, (id,))
+    
+    conexion.commit()
+    conexion.close()
+    return jsonify({"mensaje": "Incidencia cerrada"})
 
 if __name__ == "__main__":
     app.run(debug=True)
