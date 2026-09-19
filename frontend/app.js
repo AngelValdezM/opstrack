@@ -10,6 +10,7 @@ async function cargarEmpleados() {
             <td>${empleado.id}</td>
             <td>${empleado.nombre}</td>
             <td>${empleado.cargo}</td>
+            <td><button class="btn btn-danger btn-sm" onclick="eliminarEmpleado(${empleado.id})">Eliminar</button></td>
         </tr>`
     });
     
@@ -43,3 +44,20 @@ document.getElementById("form-empleado").addEventListener("submit", async (event
     document.getElementById("input-cargo").value = "";
 
 });
+
+async function eliminarEmpleado(id) {
+    // tu código aquí
+    // 1. usa confirm("¿Seguro que quieres eliminar este empleado?") — devuelve true/false
+    // 2. si el usuario cancela, no hagas nada (return)
+    // 3. si confirma, haz fetch DELETE a http://127.0.0.1:5000/empleados/${id}
+    // 4. recarga la tabla (ya sabes el patrón: limpiar innerHTML + cargarEmpleados())
+    const validacion = confirm("¿Seguro que quieres eliminar este empleado?");
+    if(!validacion) {
+        return;
+    } else {
+        const respuesta = await fetch(`http://127.0.0.1:5000/empleados/${id}`, { method: "DELETE" });
+        const contenedor = document.getElementById("tabla-empleados");
+        contenedor.innerHTML = "";
+        cargarEmpleados();
+    }
+}
