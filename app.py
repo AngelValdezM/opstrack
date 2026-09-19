@@ -18,23 +18,6 @@ def obtener_empleados():
     
     return jsonify(lista_convertida)
 
-# TURNOS
-@app.route("/turnos")
-def obtener_turnos():
-    conexion = obtener_conexion()
-    cursor = conexion.cursor()
-
-    cursor.execute("""SELECT turnos.id, empleados.nombre, turnos.estado 
-    FROM turnos
-    JOIN empleados ON turnos.empleado_id = empleados.id
-    """)
-    
-    filas = cursor.fetchall()
-    conexion.close()
-    
-    lista_convertida = [dict(fila) for fila in filas]
-    return jsonify(lista_convertida)
-
 # ACTUALIZA EMPLEADOS
 @app.route("/empleados/<int:id>", methods=["PUT"])
 def actualizar_empleado(id):
@@ -90,6 +73,22 @@ def crear_empleado():
 
     return jsonify({"mensaje": "Empleado creado"}), 201
 
+# TURNOS
+@app.route("/turnos")
+def obtener_turnos():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""SELECT turnos.id, empleados.nombre AS empleado_nombre, turnos.estado, turnos.fecha
+    FROM turnos
+    JOIN empleados ON turnos.empleado_id = empleados.id
+    """)
+    
+    filas = cursor.fetchall()
+    conexion.close()
+    
+    lista_convertida = [dict(fila) for fila in filas]
+    return jsonify(lista_convertida)
 
 # INSERTAR TURNO
 @app.route("/turnos", methods=["POST"])
@@ -121,10 +120,6 @@ def crear_turno():
 
 @app.route("/incidencias")
 def obtener_incidencias():
-    # tu código aquí, desde cero
-    # SELECT incidencias.id, incidencias.descripcion, incidencias.severidad, 
-    #        incidencias.estado, turnos.id as turno_id
-    # FROM incidencias JOIN turnos ON incidencias.turno_id = turnos.id
     conexion = obtener_conexion()
     cursor = conexion.cursor()
         

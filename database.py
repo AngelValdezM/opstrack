@@ -48,6 +48,8 @@ def inicializar_db():
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (1,'activo','2026-09-09');
     """)
 
+    # Inserta turnos
+
     cursor.execute("""
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (2,'inactivo','2026-05-09');
     """)

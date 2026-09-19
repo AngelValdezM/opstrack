@@ -1,3 +1,5 @@
+// EMPLEADOS
+
 async function cargarEmpleados() {
     const respuesta = await fetch("http://127.0.0.1:5000/empleados");
     const empleados = await respuesta.json();
@@ -78,6 +80,55 @@ function prepararEdicion(id, nombre, cargo) {
     boton.textContent = "Actualizar empleado";
 
 }
+
+// TURNOS
+
+async function cargarTurnos() {
+    const respuesta = await fetch("http://127.0.0.1:5000/turnos");
+    const turnos = await respuesta.json();
+
+    const contenedor = document.getElementById("tabla-turnos")
+    
+    turnos.forEach(turno => {
+        contenedor.innerHTML += 
+        `<tr>
+            <td>${turno.id}</td>
+            <td>${turno.empleado_nombre}</td>
+            <td>${turno.estado}</td>
+            <td>${turno.fecha}</td>
+        </tr>`
+    });
+    
+}
+
+cargarTurnos();
+
+document.getElementById("form-turno").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const empleadoID = document.getElementById("input-empleado-id").value;
+    const estado = document.getElementById("input-estado-turno").value;
+    const fecha = document.getElementById("input-fecha").value;
+
+    
+    const respuesta = await fetch("http://127.0.0.1:5000/turnos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ empleado_id: empleadoID, estado: estado, fecha : fecha })
+    });
+
+    // limpiar formulario completo, incluyendo el modo
+    document.getElementById("input-empleado-id").value = "";
+    document.getElementById("input-estado-turno").value = "activo";
+    document.getElementById("input-fecha").value = "";
+    
+
+    const contenedor = document.getElementById("tabla-turnos");
+    contenedor.innerHTML = "";
+    cargarTurnos();
+});
+
+// INCIDENCIAS
 
 async function cargarIncidencias() {
     const respuesta = await fetch("http://127.0.0.1:5000/incidencias");

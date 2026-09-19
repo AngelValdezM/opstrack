@@ -38,10 +38,42 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tabla-empleados">
-                <!-- tu código JS va a llenar esto -->
-            </tbody>
+            <tbody id="tabla-empleados"></tbody>
         </table>
+    </div>
+
+    <div class="container mt-5">
+    <h2>Turnos</h2>
+
+    <form id="form-turno" class="row g-2 mb-4">
+        <div class="col-auto">
+            <input type="number" id="input-empleado-id" class="form-control" placeholder="ID de empleado" required>
+        </div>
+        <div class="col-auto">
+        <select id="input-estado-turno" class="form-select">
+            <option value="activo">Activo</option>
+            <option value="finalizado">Finalizado</option>
+        </select>
+        </div>
+        <div class="col-auto">
+            <input type="date" id="input-fecha" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Registrar turno</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Empleado</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-turnos"></tbody>
+    </table>
     </div>
 
     <div class="container mt-5">
