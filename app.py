@@ -282,6 +282,79 @@ def metricas_incidencias_abiertas():
     
     return jsonify(dict(fila))
 
+# LISTAR ITEMS POR TURNO
+
+@app.route("/turnos/<int:turno_id>/checklist")
+def obtener_checklist(turno_id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT * FROM checklist_items WHERE turno_id = ?
+    """, (turno_id,))
+
+    filas = cursor.fetchall()
+    conexion.close()
+
+    lista_convertida = [dict(fila) for fila in filas]
+    return jsonify(lista_convertida)
+
+# AGREGAR ITEMS POR TURNO
+
+@app.route("/turnos/<int:turno_id>/checklist", methods=["POST"])
+def crear_item_checklist(turno_id):
+
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+    
+    datos = request.json
+
+    if not datos.get("descripcion"):
+        return jsonify({"error": "descripcion es obligatorio"}), 400
+    
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("""
+        INSERT INTO checklist_items (turno_id, descripcion)
+        VALUES (?, ?)
+    """, (turno_id,datos["descripcion"]))
+    
+    conexion.commit()
+    conexion.close()
+    
+    return jsonify({"mensaje": "Item agregado"}), 201
+
+# MARCAR/DESMARCAR ITEM
+
+@app.route("/checklist/<int:id>/toggle", methods=["PUT"])
+def toggle_item_checklist(id):
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("SELECT * FROM checklist_items WHERE id = ?", (id,))
+    item = cursor.fetchone()
+
+    if item["completado"] == 1:
+        nuevo_estado = 0
+    else:
+        nuevo_estado = 1
+
+    cursor.execute("""
+        UPDATE checklist_items 
+        SET completado = ?
+        WHERE id = ?
+    """, (nuevo_estado, id))
+        
+    conexion.commit()
+    conexion.close()
+    return jsonify({"mensaje": "Item actualizado"})
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 

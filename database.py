@@ -84,7 +84,16 @@ def inicializar_db():
     INSERT OR IGNORE INTO usuarios (username, password_hash)
     VALUES (?, ?)
     """, ("admin", generate_password_hash("admin123")))
-        
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS checklist_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        turno_id INTEGER NOT NULL,
+        descripcion TEXT NOT NULL,
+        completado INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (turno_id) REFERENCES turnos(id)
+    )
+    """)
 
     conexion.commit()
     conexion.close()
