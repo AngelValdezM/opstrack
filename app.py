@@ -4,7 +4,7 @@ from database import obtener_conexion
 from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
 
 @app.route("/login", methods=["POST"])
@@ -50,6 +50,9 @@ def obtener_empleados():
 @app.route("/empleados/<int:id>", methods=["PUT"])
 def actualizar_empleado(id):
 
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+
     datos = request.json
     conexion = obtener_conexion()
     cursor = conexion.cursor()
@@ -68,6 +71,9 @@ def actualizar_empleado(id):
 # ELIMINA EMPLEADO
 @app.route("/empleados/<int:id>", methods=["DELETE"])
 def eliminar_empleado(id):
+
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
 
     conexion = obtener_conexion()
     cursor = conexion.cursor()
@@ -126,6 +132,9 @@ def obtener_turnos():
 @app.route("/turnos", methods=["POST"])
 def crear_turno():
 
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+
     datos = request.json
 
     if not datos.get("empleado_id"):
@@ -170,6 +179,9 @@ def obtener_incidencias():
 @app.route("/incidencias", methods=["POST"])
 def crear_incidencia():
 
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+
     datos = request.json
 
     if not datos.get("turno_id"):
@@ -196,6 +208,10 @@ def crear_incidencia():
 
 @app.route("/incidencias/<int:id>/cerrar", methods=["PUT"])
 def cerrar_incidencia(id):
+
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+    
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     

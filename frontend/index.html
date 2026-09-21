@@ -6,94 +6,78 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
     <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <span class="navbar-brand">OpsTrack</span>
-        </div>
-    </nav>
+    
 
-    <div class="container mt-4">
-        <h2>Empleados</h2>
-
-        <form id="form-empleado" class="row g-2 mb-4">
+    <div id="seccion-login" class="container mt-4">
+        <h2>Iniciar sesión</h2>
+        <form id="form-login" class="row g-2">
             <div class="col-auto">
-                <input type="text" id="input-nombre" class="form-control" placeholder="Nombre" required>
+                <input type="text" id="input-username" class="form-control" placeholder="Usuario" required>
             </div>
             <div class="col-auto">
-                <input type="text" id="input-cargo" class="form-control" placeholder="Cargo" required>
+                <input type="password" id="input-password" class="form-control" placeholder="Contraseña" required>
             </div>
-            <input type="hidden" id="input-id-editar" value="">
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Agregar empleado</button>
+                <button type="submit" class="btn btn-primary">Ingresar</button>
             </div>
         </form>
-
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Cargo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-empleados"></tbody>
-        </table>
+        <p id="mensaje-login" class="text-danger mt-2"></p>
     </div>
 
-    <div class="container mt-5">
-    <h2>Turnos</h2>
+    <div id="seccion-app" style="display: none;">
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+                <span class="navbar-brand">OpsTrack</span>
+            </div>
+        </nav>
+        <div class="container mt-4">
+            <h2>Empleados</h2>
 
-    <form id="form-turno" class="row g-2 mb-4">
-        <div class="col-auto">
-            <input type="number" id="input-empleado-id" class="form-control" placeholder="ID de empleado" required>
-        </div>
-        <div class="col-auto">
-        <select id="input-estado-turno" class="form-select">
-            <option value="activo">Activo</option>
-            <option value="finalizado">Finalizado</option>
-        </select>
-        </div>
-        <div class="col-auto">
-            <input type="date" id="input-fecha" class="form-control" required>
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Registrar turno</button>
-        </div>
-    </form>
+            <form id="form-empleado" class="row g-2 mb-4">
+                <div class="col-auto">
+                    <input type="text" id="input-nombre" class="form-control" placeholder="Nombre" required>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="input-cargo" class="form-control" placeholder="Cargo" required>
+                </div>
+                <input type="hidden" id="input-id-editar" value="">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Agregar empleado</button>
+                </div>
+            </form>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Empleado</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-turnos"></tbody>
-    </table>
-    </div>
 
-    <div class="container mt-5">
-    <h2>Incidencias</h2>
-        <form id="form-incidencia" class="row g-2 mb-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Cargo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-empleados"></tbody>
+            </table>
+        </div>
+
+        <div class="container mt-5">
+        <h2>Turnos</h2>
+
+        <form id="form-turno" class="row g-2 mb-4">
             <div class="col-auto">
-                <input type="number" id="input-turno-id" class="form-control" placeholder="ID de turno" required>
+                <input type="number" id="input-empleado-id" class="form-control" placeholder="ID de empleado" required>
             </div>
             <div class="col-auto">
-                <input type="text" id="input-descripcion" class="form-control" placeholder="Descripción" required>
+            <select id="input-estado-turno" class="form-select">
+                <option value="activo">Activo</option>
+                <option value="finalizado">Finalizado</option>
+            </select>
             </div>
             <div class="col-auto">
-                <select id="input-severidad" class="form-select">
-                    <option value="baja">Baja</option>
-                    <option value="media">Media</option>
-                    <option value="alta">Alta</option>
-                </select>
+                <input type="date" id="input-fecha" class="form-control" required>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Registrar incidencia</button>
+                <button type="submit" class="btn btn-primary">Registrar turno</button>
             </div>
         </form>
 
@@ -101,15 +85,51 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Descripción</th>
-                    <th>Severidad</th>
+                    <th>Empleado</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Fecha</th>
                 </tr>
             </thead>
-            <tbody id="tabla-incidencias"></tbody>
+            <tbody id="tabla-turnos"></tbody>
         </table>
-    </div>
+        </div>
+
+        <div class="container mt-5">
+        <h2>Incidencias</h2>
+            <form id="form-incidencia" class="row g-2 mb-4">
+                <div class="col-auto">
+                    <input type="number" id="input-turno-id" class="form-control" placeholder="ID de turno" required>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="input-descripcion" class="form-control" placeholder="Descripción" required>
+                </div>
+                <div class="col-auto">
+                    <select id="input-severidad" class="form-select">
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Registrar incidencia</button>
+                </div>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripción</th>
+                        <th>Severidad</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-incidencias"></tbody>
+            </table>
+        </div>
+
+    </div>    
 
     <script src="app.js"></script>
     </body>

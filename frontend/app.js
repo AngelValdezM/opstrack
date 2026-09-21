@@ -1,3 +1,39 @@
+// LOGIN
+
+document.getElementById("form-login").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const username = document.getElementById("input-username").value;
+    const password = document.getElementById("input-password").value;
+
+    const respuesta = await fetch("http://127.0.0.1:5000/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",   // <- sin esto, la sesión no persiste en el navegador
+    body: JSON.stringify({ username: username, password: password })
+    });
+
+
+    const errorLogin = document.getElementById("mensaje-login");
+    const seccionLogin = document.getElementById("seccion-login");
+    const seccionApp = document.getElementById("seccion-app");
+
+    if (!respuesta.ok) {
+        const datosError = await respuesta.json();
+        errorLogin.textContent = datosError.error;
+        return;
+    }
+
+    errorLogin.textContent = "";
+    seccionLogin.style.display = "none";
+    seccionApp.style.display = "block";
+    cargarEmpleados();
+    cargarTurnos();
+    cargarIncidencias();
+
+});
+
+
 // EMPLEADOS
 
 async function cargarEmpleados() {
@@ -21,7 +57,6 @@ async function cargarEmpleados() {
     
 }
 
-cargarEmpleados();
 
 document.getElementById("form-empleado").addEventListener("submit", async (evento) => {
     evento.preventDefault();
@@ -35,6 +70,7 @@ document.getElementById("form-empleado").addEventListener("submit", async (event
         await fetch(`http://127.0.0.1:5000/empleados/${idEditar}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ nombre: nombre, cargo: cargo })
         });
     } else {
@@ -42,6 +78,7 @@ document.getElementById("form-empleado").addEventListener("submit", async (event
         await fetch("http://127.0.0.1:5000/empleados", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ nombre: nombre, cargo: cargo })
         });
     }
@@ -64,7 +101,9 @@ async function eliminarEmpleado(id) {
     if(!validacion) {
         return;
     } else {
-        const respuesta = await fetch(`http://127.0.0.1:5000/empleados/${id}`, { method: "DELETE" });
+        const respuesta = await fetch(`http://127.0.0.1:5000/empleados/${id}`, { method: "DELETE",
+            credentials: "include",
+         });
         const contenedor = document.getElementById("tabla-empleados");
         contenedor.innerHTML = "";
         cargarEmpleados();
@@ -101,7 +140,6 @@ async function cargarTurnos() {
     
 }
 
-cargarTurnos();
 
 document.getElementById("form-turno").addEventListener("submit", async (evento) => {
     evento.preventDefault();
@@ -114,6 +152,7 @@ document.getElementById("form-turno").addEventListener("submit", async (evento) 
     const respuesta = await fetch("http://127.0.0.1:5000/turnos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ empleado_id: empleadoID, estado: estado, fecha : fecha })
     });
 
@@ -153,7 +192,6 @@ async function cargarIncidencias() {
 });
 }
 
-cargarIncidencias();
 
 document.getElementById("form-incidencia").addEventListener("submit", async (evento) => {
     evento.preventDefault();
@@ -166,6 +204,7 @@ document.getElementById("form-incidencia").addEventListener("submit", async (eve
     const respuesta = await fetch("http://127.0.0.1:5000/incidencias", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ turno_id: turnoID, descripcion: descripcion, severidad : severidad })
     });
 
@@ -185,7 +224,8 @@ async function cerrarIncidencia(id) {
 
     await fetch(`http://127.0.0.1:5000/incidencias/${id}/cerrar`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
     });
     
     const contenedor = document.getElementById("tabla-incidencias");
