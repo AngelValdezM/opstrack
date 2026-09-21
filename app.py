@@ -1,9 +1,37 @@
-from flask import Flask,jsonify,request
+from flask import Flask,jsonify,request, session
 from flask_cors import CORS
 from database import obtener_conexion
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
+
+@app.route("/login", methods=["POST"])
+def login():
+    datos = request.json
+    username = datos.get("username")
+    password = datos.get("password")
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM usuarios WHERE username = ?", (username,))
+    usuario = cursor.fetchone()
+    conexion.close()
+
+    if usuario is None:
+        return jsonify({"error": "Usuario no encontrado"}), 401
+
+    if not check_password_hash(usuario["password_hash"], password):
+        return jsonify({"error": "Contraseña incorrecta"}), 401
+
+    session["usuario_id"] = usuario["id"]
+    return jsonify({"mensaje": "Login exitoso"})
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.pop("usuario_id", None)
+    return jsonify({"mensaje": "Logout exitoso"})
 
 # EMPLEADOS
 @app.route("/empleados")
@@ -53,6 +81,10 @@ def eliminar_empleado(id):
 # INSERTAR EMPLEADO
 @app.route("/empleados", methods=["POST"])
 def crear_empleado():
+
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+    
     datos = request.json
 
     if not datos.get("nombre"):

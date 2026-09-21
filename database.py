@@ -1,4 +1,5 @@
 import sqlite3
+from werkzeug.security import generate_password_hash
 
 def obtener_conexion():
     conexion = sqlite3.connect("opstrack.db")
@@ -8,7 +9,9 @@ def obtener_conexion():
 def inicializar_db():
     conexion = obtener_conexion()
     cursor = conexion.cursor()
-    
+
+    # EMPLEADOS
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS empleados (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,8 +20,7 @@ def inicializar_db():
         )
     """)
     
-    # tu código aquí — crea la tabla turnos igual que en tu sesion2-schema.sql
-    # usa el mismo esquema que ya escribiste (empleado_id, estado, fecha, FOREIGN KEY)
+    # TURNOS
     
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS turnos (
@@ -29,8 +31,6 @@ def inicializar_db():
             FOREIGN KEY (empleado_id) REFERENCES empleados(id)
         )
     """)
-
-    # Inserta al menos 3 empleados
 
     cursor.execute(""" 
         INSERT INTO empleados (nombre, cargo) VALUES ('Angel','Ingeniero');
@@ -48,15 +48,15 @@ def inicializar_db():
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (1,'activo','2026-09-09');
     """)
 
-    # Inserta turnos
-
     cursor.execute("""
-        INSERT INTO turnos (empleado_id, estado, fecha) VALUES (2,'inactivo','2026-05-09');
+        INSERT INTO turnos (empleado_id, estado, fecha) VALUES (2,'finalizado','2026-05-09');
     """)
 
     cursor.execute("""
         INSERT INTO turnos (empleado_id, estado, fecha) VALUES (3,'activo','2026-11-09');
     """)
+
+    # INCIDENCIA
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS incidencias (
@@ -70,8 +70,21 @@ def inicializar_db():
     """)
 
     cursor.execute(""" 
-            INSERT INTO incidencias (turno_id, descripcion, severidad, estado) VALUES ('1','Nombre mal hecho', 'Urgente', 'cerrada');
+            INSERT INTO incidencias (turno_id, descripcion, severidad, estado) VALUES ('1','Nombre mal hecho', 'baja', 'cerrada');
         """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL)
+    """)
+
+    cursor.execute("""
+    INSERT OR IGNORE INTO usuarios (username, password_hash)
+    VALUES (?, ?)
+    """, ("admin", generate_password_hash("admin123")))
+    
 
     conexion.commit()
     conexion.close()
