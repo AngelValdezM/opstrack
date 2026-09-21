@@ -30,6 +30,9 @@ document.getElementById("form-login").addEventListener("submit", async (evento) 
     cargarEmpleados();
     cargarTurnos();
     cargarIncidencias();
+    cargarContadorAbiertas();
+    cargarGraficoSeveridad();
+    cargarGraficoTurnos();
 
 });
 
@@ -165,6 +168,7 @@ document.getElementById("form-turno").addEventListener("submit", async (evento) 
     const contenedor = document.getElementById("tabla-turnos");
     contenedor.innerHTML = "";
     cargarTurnos();
+    cargarGraficoTurnos();
 });
 
 // INCIDENCIAS
@@ -217,6 +221,8 @@ document.getElementById("form-incidencia").addEventListener("submit", async (eve
     const contenedor = document.getElementById("tabla-incidencias");
     contenedor.innerHTML = "";
     cargarIncidencias();
+    cargarContadorAbiertas();
+    cargarGraficoSeveridad();
 
 });
 
@@ -232,4 +238,62 @@ async function cerrarIncidencia(id) {
     contenedor.innerHTML = "";
     cargarIncidencias();
 
+}
+
+async function cargarContadorAbiertas() {
+    const respuesta = await fetch("http://127.0.0.1:5000/metricas/incidencias-abiertas");
+    const datos = await respuesta.json();
+    
+
+    const contadorAbiertas = document.getElementById("contador-abiertas");
+    contadorAbiertas.textContent = datos.total;
+}
+
+let graficoSeveridad = null;
+let graficoTurnos = null;
+
+async function cargarGraficoSeveridad() {
+    const respuesta = await fetch("http://127.0.0.1:5000/metricas/incidencias-por-severidad");
+    const datos = await respuesta.json();
+
+    const etiquetas = datos.map(fila => fila.severidad);
+    const valores = datos.map(fila => fila.total);
+
+    if (graficoSeveridad) {
+        graficoSeveridad.destroy();
+    }
+
+    graficoSeveridad = new Chart(document.getElementById("grafico-severidad"), {
+        type: "pie",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Incidencias por severidad",
+                data: valores
+            }]
+        }
+    });
+}
+
+async function cargarGraficoTurnos() {
+    const respuesta = await fetch("http://127.0.0.1:5000/metricas/turnos-por-estado");
+    const datos = await respuesta.json();
+
+    const etiquetas = datos.map(fila => fila.estado);
+    const valores = datos.map(fila => fila.total);
+
+    if (graficoTurnos) {
+        graficoTurnos.destroy();
+    }
+
+    graficoTurnos = new Chart(document.getElementById("grafico-turnos"), {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Turnos por estado",
+                data: valores
+            }]
+        }
+    });
 }
