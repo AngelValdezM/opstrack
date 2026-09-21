@@ -225,6 +225,63 @@ def cerrar_incidencia(id):
     conexion.close()
     return jsonify({"mensaje": "Incidencia cerrada"})
 
+# INCIDENCIAS POR SEVERIDAD
+
+@app.route("/metricas/incidencias-por-severidad")
+def metricas_incidencias_severidad():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT severidad, COUNT(*) as total
+        FROM incidencias
+        GROUP BY severidad
+    """)
+
+    filas = cursor.fetchall()
+    conexion.close()
+
+    lista_convertida = [dict(fila) for fila in filas]
+    return jsonify(lista_convertida)
+
+# TURNOS POR ESTADO
+
+@app.route("/metricas/turnos-por-estado")
+def metricas_turnos_estado():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT estado, COUNT(*) as total
+        FROM turnos
+        GROUP BY estado
+    """)
+
+    filas = cursor.fetchall()
+    conexion.close()
+
+    lista_convertida = [dict(fila) for fila in filas]
+    return jsonify(lista_convertida)
+
+# INCIDENCIAS ABIERTAS
+
+@app.route("/metricas/incidencias-abiertas")
+def metricas_incidencias_abiertas():
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*) as total
+        FROM incidencias
+        WHERE estado = 'abierta'
+    """)
+
+    fila = cursor.fetchone()
+    conexion.close()
+    
+    return jsonify(dict(fila))
+
 if __name__ == "__main__":
     app.run(debug=True)
 

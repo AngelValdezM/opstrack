@@ -84,7 +84,7 @@ def inicializar_db():
     INSERT OR IGNORE INTO usuarios (username, password_hash)
     VALUES (?, ?)
     """, ("admin", generate_password_hash("admin123")))
-    
+        
 
     conexion.commit()
     conexion.close()

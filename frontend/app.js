@@ -231,4 +231,5 @@ async function cerrarIncidencia(id) {
     const contenedor = document.getElementById("tabla-incidencias");
     contenedor.innerHTML = "";
     cargarIncidencias();
+
 }
