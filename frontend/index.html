@@ -119,6 +119,26 @@
         </div>
 
         <div class="container mt-5">
+            <h2>Checklist de turno</h2>
+
+            <div class="mb-3">
+                <input type="number" id="input-turno-checklist" class="form-control d-inline-block w-auto" placeholder="ID de turno">
+                <button class="btn btn-secondary" onclick="cargarChecklist()">Ver checklist</button>
+            </div>
+
+            <form id="form-checklist-item" class="row g-2 mb-3">
+                <div class="col-auto">
+                    <input type="text" id="input-item-descripcion" class="form-control" placeholder="Nueva tarea" required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Agregar tarea</button>
+                </div>
+            </form>
+
+            <ul id="lista-checklist" class="list-group"></ul>
+        </div>
+
+        <div class="container mt-5">
         <h2>Incidencias</h2>
             <form id="form-incidencia" class="row g-2 mb-4">
                 <div class="col-auto">
