@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=[
     "http://127.0.0.1:5500",
-    "https://opsstrack.netlify.app/"
+    "https://opsstrack.netlify.app"
 ])
 app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
 
