@@ -22,9 +22,9 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
 - Deploy: Render (backend) + Netlify (frontend)
 
 ## Capturas
-<img src="screenshots/LOGIN.png" width="300px">
-<img src="screenshots/DASHBOARD_1.png" width="300px">
-<img src="screenshots/DASHBOARD_2.png" width="300px">
+<img src="screenshots/LOGIN.png" width="80%">
+<img src="screenshots/DASHBOARD_1.png" width="80%">
+<img src="screenshots/DASHBOARD_2.png" width="80%">
 
 ## Cómo correrlo localmente
 
