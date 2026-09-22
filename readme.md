@@ -16,7 +16,7 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
 - Dashboard con métricas en tiempo real (Chart.js)
 
 ## Stack técnico
-- Backend: Python, Flask, SQLite
+- Backend: Python, Flask, PostgreSQL
 - Frontend: HTML, CSS (Bootstrap), JavaScript vanilla
 - Autenticación: Flask sessions + password hashing
 - Deploy: Render (backend) + Netlify (frontend)
@@ -57,6 +57,5 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
 
 6. Abre `frontend/index.html` con Live Server (VS Code) para el frontend.
 
-## Limitaciones conocidas
-- La base de datos se reinicia en cada redeploy (plan gratuito de Render)
-- Próxima mejora planeada: migración a PostgreSQL para persistencia real
+## Base de datos
+PostgreSQL en Render (persistente entre despliegues).
