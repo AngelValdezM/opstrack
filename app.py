@@ -4,7 +4,7 @@ from database import obtener_conexion
 from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500"])
 app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
 
 @app.route("/login", methods=["POST"])
