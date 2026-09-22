@@ -41,6 +41,12 @@ def logout():
     session.pop("usuario_id", None)
     return jsonify({"mensaje": "Logout exitoso"})
 
+@app.route("/session-check")
+def session_check():
+    if "usuario_id" in session:
+        return jsonify({"logueado": True})
+    return jsonify({"logueado": False})
+
 # EMPLEADOS
 @app.route("/empleados")
 def obtener_empleados():

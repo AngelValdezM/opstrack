@@ -38,6 +38,38 @@ document.getElementById("form-login").addEventListener("submit", async (evento) 
 
 });
 
+// LOGOUT
+
+document.getElementById("boton-logout").addEventListener("click", async () => {
+    await fetch(`${API_URL}/logout`, {
+        method: "POST",
+        credentials: "include"
+    });
+
+    document.getElementById("seccion-app").style.display = "none";
+    document.getElementById("seccion-login").style.display = "block";
+});
+
+// VERIFICAR SESION
+
+async function verificarSesion() {
+    const respuesta = await fetch(`${API_URL}/session-check`, { credentials: "include" });
+    const datos = await respuesta.json();
+
+    if (datos.logueado) {
+        document.getElementById("seccion-login").style.display = "none";
+        document.getElementById("seccion-app").style.display = "block";
+        cargarEmpleados();
+        cargarTurnos();
+        cargarIncidencias();
+        cargarContadorAbiertas();
+        cargarGraficoSeveridad();
+        cargarGraficoTurnos();
+    }
+}
+
+verificarSesion();
+
 
 // EMPLEADOS
 
