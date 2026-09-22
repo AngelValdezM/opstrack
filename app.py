@@ -368,6 +368,22 @@ def toggle_item_checklist(id):
     conexion.close()
     return jsonify({"mensaje": "Item actualizado"})
 
+# ELIMINAR ITEM
+
+@app.route("/checklist/<int:id>", methods=["DELETE"])
+def eliminar_item_checklist(id):
+    if "usuario_id" not in session:
+        return jsonify({"error": "No autorizado, inicia sesión"}), 401
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("DELETE FROM checklist_items WHERE id = ?", (id,))
+        
+    conexion.commit()
+    conexion.close()    
+    return jsonify({"mensaje": "Tarea eliminada"})
+
 
 if __name__ == "__main__":
     import os
