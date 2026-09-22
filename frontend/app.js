@@ -1,3 +1,5 @@
+const API_URL = "https://opstrack-ihgm.onrender.com";
+
 // LOGIN
 
 document.getElementById("form-login").addEventListener("submit", async (evento) => {
@@ -6,7 +8,7 @@ document.getElementById("form-login").addEventListener("submit", async (evento) 
     const username = document.getElementById("input-username").value;
     const password = document.getElementById("input-password").value;
 
-    const respuesta = await fetch("http://127.0.0.1:5000/login", {
+    const respuesta = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",   // <- sin esto, la sesión no persiste en el navegador
@@ -40,7 +42,7 @@ document.getElementById("form-login").addEventListener("submit", async (evento) 
 // EMPLEADOS
 
 async function cargarEmpleados() {
-    const respuesta = await fetch("http://127.0.0.1:5000/empleados");
+    const respuesta = await fetch(`${API_URL}/empleados`);
     const empleados = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-empleados")
@@ -70,7 +72,7 @@ document.getElementById("form-empleado").addEventListener("submit", async (event
 
     if (idEditar) {
         // modo editar
-        await fetch(`http://127.0.0.1:5000/empleados/${idEditar}`, {
+        await fetch(`${API_URL}/empleados/${idEditar}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -78,7 +80,7 @@ document.getElementById("form-empleado").addEventListener("submit", async (event
         });
     } else {
         // modo crear
-        await fetch("http://127.0.0.1:5000/empleados", {
+        await fetch(`${API_URL}/empleados`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -104,7 +106,7 @@ async function eliminarEmpleado(id) {
     if(!validacion) {
         return;
     } else {
-        const respuesta = await fetch(`http://127.0.0.1:5000/empleados/${id}`, { method: "DELETE",
+        const respuesta = await fetch(`${API_URL}/empleados/${id}`, { method: "DELETE",
             credentials: "include",
          });
         const contenedor = document.getElementById("tabla-empleados");
@@ -126,7 +128,7 @@ function prepararEdicion(id, nombre, cargo) {
 // TURNOS
 
 async function cargarTurnos() {
-    const respuesta = await fetch("http://127.0.0.1:5000/turnos");
+    const respuesta = await fetch(`${API_URL}/turnos`);
     const turnos = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-turnos")
@@ -152,7 +154,7 @@ document.getElementById("form-turno").addEventListener("submit", async (evento) 
     const fecha = document.getElementById("input-fecha").value;
 
     
-    const respuesta = await fetch("http://127.0.0.1:5000/turnos", {
+    const respuesta = await fetch(`${API_URL}/turnos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -174,7 +176,7 @@ document.getElementById("form-turno").addEventListener("submit", async (evento) 
 // INCIDENCIAS
 
 async function cargarIncidencias() {
-    const respuesta = await fetch("http://127.0.0.1:5000/incidencias");
+    const respuesta = await fetch(`${API_URL}/incidencias`);
     const incidencias = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-incidencias")
@@ -205,7 +207,7 @@ document.getElementById("form-incidencia").addEventListener("submit", async (eve
     const severidad = document.getElementById("input-severidad").value;
 
     
-    const respuesta = await fetch("http://127.0.0.1:5000/incidencias", {
+    const respuesta = await fetch(`${API_URL}/incidencias`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -228,7 +230,7 @@ document.getElementById("form-incidencia").addEventListener("submit", async (eve
 
 async function cerrarIncidencia(id) {
 
-    await fetch(`http://127.0.0.1:5000/incidencias/${id}/cerrar`, {
+    await fetch(`${API_URL}/incidencias/${id}/cerrar`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include"
@@ -243,7 +245,7 @@ async function cerrarIncidencia(id) {
 // GRAFICOS
 
 async function cargarContadorAbiertas() {
-    const respuesta = await fetch("http://127.0.0.1:5000/metricas/incidencias-abiertas");
+    const respuesta = await fetch(`${API_URL}/metricas/incidencias-abiertas`);
     const datos = await respuesta.json();
     
 
@@ -255,7 +257,7 @@ let graficoSeveridad = null;
 let graficoTurnos = null;
 
 async function cargarGraficoSeveridad() {
-    const respuesta = await fetch("http://127.0.0.1:5000/metricas/incidencias-por-severidad");
+    const respuesta = await fetch(`${API_URL}/metricas/incidencias-por-severidad`);
     const datos = await respuesta.json();
 
     const etiquetas = datos.map(fila => fila.severidad);
@@ -278,7 +280,7 @@ async function cargarGraficoSeveridad() {
 }
 
 async function cargarGraficoTurnos() {
-    const respuesta = await fetch("http://127.0.0.1:5000/metricas/turnos-por-estado");
+    const respuesta = await fetch(`${API_URL}/metricas/turnos-por-estado`);
     const datos = await respuesta.json();
 
     const etiquetas = datos.map(fila => fila.estado);
@@ -303,7 +305,7 @@ async function cargarGraficoTurnos() {
 async function cargarChecklist() {
     const turnoId = document.getElementById("input-turno-checklist").value;
 
-    const respuesta = await fetch(`http://127.0.0.1:5000/turnos/${turnoId}/checklist`);
+    const respuesta = await fetch(`${API_URL}/turnos/${turnoId}/checklist`);
     const items = await respuesta.json();
 
     const lista = document.getElementById("lista-checklist");
@@ -320,7 +322,7 @@ async function cargarChecklist() {
 }
 
 async function toggleItem(id) {
-    await fetch(`http://127.0.0.1:5000/checklist/${id}/toggle`, {
+    await fetch(`${API_URL}/checklist/${id}/toggle`, {
         method: "PUT",
         credentials: "include"
     });
@@ -334,7 +336,7 @@ document.getElementById("form-checklist-item").addEventListener("submit", async 
     const turnoId = document.getElementById("input-turno-checklist").value;
     const descripcion = document.getElementById("input-item-descripcion").value;
 
-    await fetch(`http://127.0.0.1:5000/turnos/${turnoId}/checklist`, {
+    await fetch(`${API_URL}/turnos/${turnoId}/checklist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
