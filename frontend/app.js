@@ -345,9 +345,12 @@ async function cargarChecklist() {
 
     items.forEach(item => {
         lista.innerHTML += `
-            <li class="list-group-item">
-                <input type="checkbox" ${item.completado ? "checked" : ""} onchange="toggleItem(${item.id})">
-                ${item.descripcion}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                    <input type="checkbox" ${item.completado ? "checked" : ""} onchange="toggleItem(${item.id})">
+                    ${item.descripcion}
+                </span>
+                <button class="btn btn-danger btn-sm" onclick="eliminarItemChecklist(${item.id})">Eliminar</button>
             </li>
         `;
     });
@@ -378,3 +381,18 @@ document.getElementById("form-checklist-item").addEventListener("submit", async 
     document.getElementById("input-item-descripcion").value = "";
     cargarChecklist();
 });
+
+async function eliminarItemChecklist(id) {
+
+    const validacion = confirm("¿Seguro que quieres eliminar esta tarea?");
+    if(!validacion) {
+        return;
+    } else {
+        const respuesta = await fetch(`${API_URL}/checklist/${id}`, { method: "DELETE",
+            credentials: "include",
+         });
+        cargarChecklist();
+    }
+}
+
+
