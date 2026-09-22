@@ -1,7 +1,9 @@
 from flask import Flask,jsonify,request, session
 from flask_cors import CORS
-from database import obtener_conexion
+from database import obtener_conexion,inicializar_db
 from werkzeug.security import check_password_hash
+
+inicializar_db()
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=[
@@ -23,7 +25,7 @@ def login():
 
     conexion = obtener_conexion()
     cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM usuarios WHERE username = ?", (username,))
+    cursor.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
     usuario = cursor.fetchone()
     conexion.close()
 
@@ -73,8 +75,8 @@ def actualizar_empleado(id):
 
     cursor.execute("""
     UPDATE empleados 
-    SET nombre = ?, cargo = ? 
-    WHERE id = ?;
+    SET nombre = %s, cargo = %s 
+    WHERE id = %s;
     """, (datos.get("nombre"),datos.get("cargo"),id))
 
     conexion.commit()
@@ -92,7 +94,7 @@ def eliminar_empleado(id):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
 
-    cursor.execute("DELETE FROM empleados WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM empleados WHERE id = %s", (id,))
     
     conexion.commit()
     conexion.close()    
@@ -117,7 +119,7 @@ def crear_empleado():
 
     cursor.execute("""
         INSERT INTO empleados (nombre, cargo)
-        VALUES (?, ?)
+        VALUES (%s, %s)
     """, (datos["nombre"], datos["cargo"]))
 
     conexion.commit()
@@ -163,7 +165,7 @@ def crear_turno():
 
     cursor.execute("""
         INSERT INTO turnos (empleado_id, estado, fecha)
-        VALUES (?, ?, ?)
+        VALUES (%s, %s, %s)
     """, (datos["empleado_id"], datos["estado"], datos["fecha"]))
 
     conexion.commit()
@@ -210,7 +212,7 @@ def crear_incidencia():
 
     cursor.execute("""
         INSERT INTO incidencias (turno_id, descripcion, severidad)
-        VALUES (?, ?, ?)
+        VALUES (%s, %s, %s)
     """, (datos["turno_id"], datos["descripcion"], datos["severidad"]))
 
     conexion.commit()
@@ -232,7 +234,7 @@ def cerrar_incidencia(id):
     cursor.execute("""
     UPDATE incidencias 
     SET estado = 'cerrada' 
-    WHERE id = ?;
+    WHERE id = %s;
     """, (id,))
     
     conexion.commit()
@@ -304,7 +306,7 @@ def obtener_checklist(turno_id):
     cursor = conexion.cursor()
 
     cursor.execute("""
-        SELECT * FROM checklist_items WHERE turno_id = ?
+        SELECT * FROM checklist_items WHERE turno_id = %s
     """, (turno_id,))
 
     filas = cursor.fetchall()
@@ -331,7 +333,7 @@ def crear_item_checklist(turno_id):
     
     cursor.execute("""
         INSERT INTO checklist_items (turno_id, descripcion)
-        VALUES (?, ?)
+        VALUES (%s, %s)
     """, (turno_id,datos["descripcion"]))
     
     conexion.commit()
@@ -350,7 +352,7 @@ def toggle_item_checklist(id):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
 
-    cursor.execute("SELECT * FROM checklist_items WHERE id = ?", (id,))
+    cursor.execute("SELECT * FROM checklist_items WHERE id = %s", (id,))
     item = cursor.fetchone()
 
     if item["completado"] == 1:
@@ -360,8 +362,8 @@ def toggle_item_checklist(id):
 
     cursor.execute("""
         UPDATE checklist_items 
-        SET completado = ?
-        WHERE id = ?
+        SET completado = %s
+        WHERE id = %s
     """, (nuevo_estado, id))
         
     conexion.commit()
@@ -378,7 +380,7 @@ def eliminar_item_checklist(id):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     
-    cursor.execute("DELETE FROM checklist_items WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM checklist_items WHERE id = %s", (id,))
         
     conexion.commit()
     conexion.close()    
