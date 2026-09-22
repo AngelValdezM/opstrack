@@ -7,6 +7,11 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500"])
 app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
 
+app.config.update(
+    SESSION_COOKIE_SAMESITE="None",
+    SESSION_COOKIE_SECURE=True
+)
+
 @app.route("/login", methods=["POST"])
 def login():
     datos = request.json
