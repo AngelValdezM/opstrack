@@ -78,7 +78,8 @@ async function cargarEmpleados() {
     const empleados = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-empleados")
-    
+    contenedor.innerHTML = "";
+
     empleados.forEach(empleado => {
         contenedor.innerHTML += 
         `<tr>
@@ -164,7 +165,8 @@ async function cargarTurnos() {
     const turnos = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-turnos")
-    
+    contenedor.innerHTML = "";
+
     turnos.forEach(turno => {
         contenedor.innerHTML += 
         `<tr>
@@ -212,7 +214,8 @@ async function cargarIncidencias() {
     const incidencias = await respuesta.json();
 
     const contenedor = document.getElementById("tabla-incidencias")
-    
+    contenedor.innerHTML = "";
+
     incidencias.forEach(incidencia => {
 
     const botonHtml = incidencia.estado === "cerrada" 
