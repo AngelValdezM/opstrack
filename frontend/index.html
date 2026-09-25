@@ -2,180 +2,305 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>OpsTrack</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-    <body>
-    
+<body class="bg-light">
 
-    <div id="seccion-login" class="container mt-4">
-        <h2>Iniciar sesión</h2>
-        <form id="form-login" class="row g-2">
-            <div class="col-auto">
-                <input type="text" id="input-username" class="form-control" placeholder="Usuario" required>
+    <!-- LOGIN -->
+    <div id="seccion-login">
+        <div class="d-flex align-items-center justify-content-center min-vh-100 px-3">
+            <div class="card shadow-sm w-100" style="max-width: 400px;">
+                <div class="card-body p-4">
+                    <h1 class="h3 text-center mb-1"><i class="bi bi-clipboard2-check text-primary"></i> OpsTrack</h1>
+                    <p class="text-center text-muted mb-4">Inicia sesión para continuar</p>
+
+                    <form id="form-login">
+                        <div class="mb-3">
+                            <label for="input-username" class="form-label">Usuario</label>
+                            <input type="text" id="input-username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="input-password" class="form-label">Contraseña</label>
+                            <input type="password" id="input-password" class="form-control" required>
+                        </div>
+                        <div id="mensaje-login" class="alert alert-danger py-2 d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                    </form>
+                </div>
             </div>
-            <div class="col-auto">
-                <input type="password" id="input-password" class="form-control" placeholder="Contraseña" required>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Ingresar</button>
-            </div>
-        </form>
-        <p id="mensaje-login" class="text-danger mt-2"></p>
+        </div>
     </div>
 
+    <!-- APP -->
     <div id="seccion-app" style="display: none;">
         <nav class="navbar navbar-dark bg-dark">
             <div class="container">
-                <span class="navbar-brand">OpsTrack</span>
+                <span class="navbar-brand"><i class="bi bi-clipboard2-check"></i> OpsTrack</span>
+                <button id="boton-logout" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
             </div>
-            <button id="boton-logout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
         </nav>
 
-        <div class="container mt-4">
-        <h2>Dashboard</h2>
+        <div class="container mt-3">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-dashboard" data-bs-toggle="tab" data-bs-target="#panel-dashboard" type="button" role="tab">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-empleados" type="button" role="tab">
+                        <i class="bi bi-people"></i> Empleados
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-turnos" type="button" role="tab">
+                        <i class="bi bi-calendar-week"></i> Turnos
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-checklist" type="button" role="tab">
+                        <i class="bi bi-list-check"></i> Checklist
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-incidencias" type="button" role="tab">
+                        <i class="bi bi-exclamation-triangle"></i> Incidencias
+                    </button>
+                </li>
+            </ul>
+        </div>
 
-            <div class="row mb-4">
-                <div class="col-auto">
-                    <div class="card p-3">
-                        <span class="text-muted">Incidencias abiertas</span>
-                        <h3 id="contador-abiertas">-</h3>
+        <div class="container my-4">
+            <div class="tab-content">
+
+                <!-- DASHBOARD -->
+                <div class="tab-pane fade show active" id="panel-dashboard" role="tabpanel">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <span class="text-muted">Incidencias abiertas</span>
+                                    <p id="contador-abiertas" class="display-4 fw-bold text-danger mb-0">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">Incidencias por severidad</div>
+                                <div class="card-body" style="height: 300px; position: relative;">
+                                    <canvas id="grafico-severidad"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">Turnos por estado</div>
+                                <div class="card-body" style="height: 300px; position: relative;">
+                                    <canvas id="grafico-turnos"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <canvas id="grafico-severidad"></canvas>
+                <!-- EMPLEADOS -->
+                <div class="tab-pane fade" id="panel-empleados" role="tabpanel">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">Empleado</div>
+                        <div class="card-body">
+                            <form id="form-empleado" class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="input-nombre" class="form-label">Nombre</label>
+                                    <input type="text" id="input-nombre" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="input-cargo" class="form-label">Cargo</label>
+                                    <input type="text" id="input-cargo" class="form-control" required>
+                                </div>
+                                <input type="hidden" id="input-id-editar" value="">
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg"></i> <span id="texto-boton-empleado">Agregar empleado</span>
+                                    </button>
+                                    <button type="button" id="boton-cancelar-edicion" class="btn btn-outline-secondary d-none">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Cargo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-empleados"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <canvas id="grafico-turnos"></canvas>
+
+                <!-- TURNOS -->
+                <div class="tab-pane fade" id="panel-turnos" role="tabpanel">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">Registrar turno</div>
+                        <div class="card-body">
+                            <form id="form-turno" class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="input-empleado-id" class="form-label">Empleado</label>
+                                    <select id="input-empleado-id" class="form-select" required></select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="input-estado-turno" class="form-label">Estado</label>
+                                    <select id="input-estado-turno" class="form-select">
+                                        <option value="activo">Activo</option>
+                                        <option value="finalizado">Finalizado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="input-fecha" class="form-label">Fecha</label>
+                                    <input type="date" id="input-fecha" class="form-control" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-lg"></i> Registrar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Empleado</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-turnos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHECKLIST -->
+                <div class="tab-pane fade" id="panel-checklist" role="tabpanel">
+                    <div class="card shadow-sm">
+                        <div class="card-header">Checklist de turno</div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="input-turno-checklist" class="form-label">Turno</label>
+                                <select id="input-turno-checklist" class="form-select"></select>
+                            </div>
+
+                            <form id="form-checklist-item" class="row g-2 mb-3">
+                                <div class="col">
+                                    <input type="text" id="input-item-descripcion" class="form-control" placeholder="Nueva tarea" required>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg"></i> Agregar tarea
+                                    </button>
+                                </div>
+                            </form>
+
+                            <ul id="lista-checklist" class="list-group"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INCIDENCIAS -->
+                <div class="tab-pane fade" id="panel-incidencias" role="tabpanel">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">Registrar incidencia</div>
+                        <div class="card-body">
+                            <form id="form-incidencia" class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="input-turno-id" class="form-label">Turno</label>
+                                    <select id="input-turno-id" class="form-select" required></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="input-descripcion" class="form-label">Descripción</label>
+                                    <input type="text" id="input-descripcion" class="form-control" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="input-severidad" class="form-label">Severidad</label>
+                                    <select id="input-severidad" class="form-select">
+                                        <option value="baja">Baja</option>
+                                        <option value="media">Media</option>
+                                        <option value="alta">Alta</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-lg"></i> Registrar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Descripción</th>
+                                        <th>Severidad</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-incidencias"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMACION -->
+    <div class="modal fade" id="modal-confirmar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" id="modal-confirmar-mensaje"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="boton-confirmar">Eliminar</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="container mt-4">
-            <h2>Empleados</h2>
+    <!-- TOASTS -->
+    <div id="contenedor-toasts" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-            <form id="form-empleado" class="row g-2 mb-4">
-                <div class="col-auto">
-                    <input type="text" id="input-nombre" class="form-control" placeholder="Nombre" required>
-                </div>
-                <div class="col-auto">
-                    <input type="text" id="input-cargo" class="form-control" placeholder="Cargo" required>
-                </div>
-                <input type="hidden" id="input-id-editar" value="">
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Agregar empleado</button>
-                </div>
-            </form>
-
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Cargo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-empleados"></tbody>
-            </table>
-        </div>
-
-        <div class="container mt-5">
-        <h2>Turnos</h2>
-
-        <form id="form-turno" class="row g-2 mb-4">
-            <div class="col-auto">
-                <input type="number" id="input-empleado-id" class="form-control" placeholder="ID de empleado" required>
-            </div>
-            <div class="col-auto">
-            <select id="input-estado-turno" class="form-select">
-                <option value="activo">Activo</option>
-                <option value="finalizado">Finalizado</option>
-            </select>
-            </div>
-            <div class="col-auto">
-                <input type="date" id="input-fecha" class="form-control" required>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Registrar turno</button>
-            </div>
-        </form>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Empleado</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-turnos"></tbody>
-        </table>
-        </div>
-
-        <div class="container mt-5">
-            <h2>Checklist de turno</h2>
-
-            <div class="mb-3">
-                <input type="number" id="input-turno-checklist" class="form-control d-inline-block w-auto" placeholder="ID de turno">
-                <button class="btn btn-secondary" onclick="cargarChecklist()">Ver checklist</button>
-            </div>
-
-            <form id="form-checklist-item" class="row g-2 mb-3">
-                <div class="col-auto">
-                    <input type="text" id="input-item-descripcion" class="form-control" placeholder="Nueva tarea" required>
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Agregar tarea</button>
-                </div>
-            </form>
-
-            <ul id="lista-checklist" class="list-group"></ul>
-        </div>
-
-        <div class="container mt-5">
-        <h2>Incidencias</h2>
-            <form id="form-incidencia" class="row g-2 mb-4">
-                <div class="col-auto">
-                    <input type="number" id="input-turno-id" class="form-control" placeholder="ID de turno" required>
-                </div>
-                <div class="col-auto">
-                    <input type="text" id="input-descripcion" class="form-control" placeholder="Descripción" required>
-                </div>
-                <div class="col-auto">
-                    <select id="input-severidad" class="form-select">
-                        <option value="baja">Baja</option>
-                        <option value="media">Media</option>
-                        <option value="alta">Alta</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Registrar incidencia</button>
-                </div>
-            </form>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Descripción</th>
-                        <th>Severidad</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-incidencias"></tbody>
-            </table>
-        </div>
-
-    </div>    
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="app.js"></script>
-    </body>
+</body>
 </html>
