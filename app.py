@@ -1,3 +1,5 @@
+import os
+from datetime import timedelta
 from flask import Flask,jsonify,request, session
 from flask_cors import CORS
 from database import obtener_conexion,inicializar_db
@@ -10,11 +12,12 @@ CORS(app, supports_credentials=True, origins=[
     "http://127.0.0.1:5500",
     "https://opsstrack.netlify.app"
 ])
-app.secret_key = "thecrack2104"  # necesario para que las sesiones funcionen
+app.secret_key = os.environ["SECRET_KEY"]  # necesario para que las sesiones funcionen
 
 app.config.update(
     SESSION_COOKIE_SAMESITE="None",
-    SESSION_COOKIE_SECURE=True
+    SESSION_COOKIE_SECURE=True,
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=2)
 )
 
 @app.route("/login", methods=["POST"])
@@ -35,6 +38,7 @@ def login():
     if not check_password_hash(usuario["password_hash"], password):
         return jsonify({"error": "Contraseña incorrecta"}), 401
 
+    session.permanent = True
     session["usuario_id"] = usuario["id"]
     return jsonify({"mensaje": "Login exitoso"})
 
