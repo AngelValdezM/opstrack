@@ -268,7 +268,7 @@ async function cargarTurnos() {
 
     const opciones = turnos.map(t => ({
         valor: t.id,
-        texto: `#${t.id} · ${t.empleado_nombre} · ${t.fecha} (${t.estado})`
+        texto: `${t.empleado_nombre} · ${t.fecha} (${t.estado})`
     }));
     llenarSelect(document.getElementById("input-turno-id"), opciones, "Selecciona un turno");
     llenarSelect(document.getElementById("input-turno-checklist"), opciones, "Selecciona un turno");
