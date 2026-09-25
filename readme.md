@@ -10,10 +10,11 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
 - Usuario de prueba: admin / admin123
 
 ## Funcionalidades
-- Autenticación con sesiones
+- Autenticación con sesiones (expiran tras 2 horas de inactividad)
 - CRUD completo de empleados, turnos e incidencias
 - Checklist de cierre de turno con seguimiento de completado
 - Dashboard con métricas en tiempo real (Chart.js)
+- Interfaz responsive con pestañas
 
 ## Stack técnico
 - Backend: Python, Flask, PostgreSQL
@@ -21,10 +22,6 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
 - Autenticación: Flask sessions + password hashing
 - Deploy: Render (backend) + Netlify (frontend)
 
-## Capturas
-<img src="screenshots/LOGIN.png" width="80%">
-<img src="screenshots/DASHBOARD_1.png" width="80%">
-<img src="screenshots/DASHBOARD_2.png" width="80%">
 
 ## Cómo correrlo localmente
 
@@ -45,17 +42,30 @@ Supervisor de Operaciones se manejaban en hojas de cálculo.
    pip install -r requirements.txt
    ```
 
-4. Inicializa la base de datos:
-   ```bash
-   python database.py
+4. Define las variables de entorno (PowerShell):
+   ```powershell
+   $env:DATABASE_URL = "postgresql://usuario:contraseña@host:5432/basedatos"
+   $env:SECRET_KEY = "una-clave-larga-y-aleatoria"
    ```
 
-5. Corre el servidor:
+5. Corre el servidor (crea las tablas al iniciar):
    ```bash
    python app.py
    ```
 
 6. Abre `frontend/index.html` con Live Server (VS Code) para el frontend.
 
+## Variables de entorno
+- `DATABASE_URL`: conexión a PostgreSQL.
+- `SECRET_KEY`: clave para firmar las sesiones. No se sube al repositorio.
+
 ## Base de datos
 PostgreSQL en Render (persistente entre despliegues).
+
+## Capturas
+<img src="screenshots/LOGIN.png" width="80%">
+<img src="screenshots/DASHBOARD.png" width="80%">
+<img src="screenshots/EMPLEADOS.png" width="80%">
+<img src="screenshots/TURNOS.png" width="80%">
+<img src="screenshots/CHECKLIST.png" width="80%">
+<img src="screenshots/INCIDENCIAS.png" width="80%">
