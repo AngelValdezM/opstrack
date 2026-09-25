@@ -137,11 +137,11 @@ def obtener_turnos():
     conexion = obtener_conexion()
     cursor = conexion.cursor()
 
-    cursor.execute("""SELECT turnos.id, empleados.nombre AS empleado_nombre, turnos.estado, turnos.fecha
+    cursor.execute("""SELECT turnos.id, empleados.nombre AS empleado_nombre, turnos.estado, TO_CHAR(turnos.fecha, 'YYYY-MM-DD') AS fecha
     FROM turnos
     JOIN empleados ON turnos.empleado_id = empleados.id
     """)
-    
+
     filas = cursor.fetchall()
     conexion.close()
     
